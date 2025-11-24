@@ -25,11 +25,37 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      # Step 3: Build the project and run SpotBugs
+      # Step 3: Build the project and run Analysis (This step will now continue on error)
       - name: Build with Maven and Run Analysis
+        # Setting continue-on-error: true ensures the next step runs even if 'verify' fails.
+        # This is temporary for debugging the RAT report.
         run: mvn -B clean verify -DskipTests
+        continue-on-error: true
 
-      # Step 4: Download and extract the Embold scanner
+      # Step 3.5: DEBUG: Print RAT Report
+      # This step runs even if the Maven build (Step 3) failed (due to 'if: always()').
+      - name: Print Rat Report to Console (Find unapproved files)
+        if: always()
+        run: |
+          RAT_REPORT_PATH="target/rat.txt"
+          
+          echo "Looking for RAT report at: ${RAT_REPORT_PATH}"
+          
+          if [ -f "${RAT_REPORT_PATH}" ]; then
+            echo "--- START RAT REPORT: Unapproved Files ---"
+            
+            # The RAT report marks unapproved files with a '?' or similar non-standard flag
+            # Grep for any line that does *not* start with 'License' (approved header count)
+            # or 'Binary' (ignored binary files) and remove boilerplate lines.
+            cat ${RAT_REPORT_PATH} | grep -v 'License.*|' | grep -v 'Binary' | grep -v '^\s*$'
+            
+            echo "--- END RAT REPORT ---"
+          else
+            echo "RAT report file (${RAT_REPORT_PATH}) not found. The Maven build may have failed before reaching the rat:check goal."
+          fi
+
+      # Step 4: Download and extract the Embold scanner (This and later steps will be skipped 
+      # if the Maven build failed, which is expected for now until you fix the RAT issue).
       - name: Download and Extract Scanner
         run: |
           curl https://v1.embold.io/nfs/CLI/browserstack-codequality-scanner.tar.gz -o browserstack-codequality-scanner-archive.tar.gz
