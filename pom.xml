@@ -1,23 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--
-~ Licensed to the Apache Software Foundation (ASF) under one or more
-~ contributor license agreements.  See the NOTICE file distributed with
-~ this work for additional information regarding copyright ownership.
-~ The ASF licenses this file to You under the Apache License, Version 2.0
-~ (the "License"); you may not use this file except in compliance with
-~ the License.  You may obtain a copy of the License at
-~
-~    http://www.apache.org/licenses/LICENSE-2.0
-~
-~ Unless required by applicable law or agreed to in writing, software
-~ distributed under the License is distributed on an "AS IS" BASIS,
-~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-~ See the License for the specific language governing permissions and
-~ limitations under the License.
-~
--->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -121,7 +103,6 @@
         <pulsar.version>3.2.2</pulsar.version>
         <parquet.version>1.16.0</parquet.version>
         <quartz.version>2.3.2</quartz.version>
-        <!-- needs to be lower than 4.x.x, see https://github.com/apache/streampipes/issues/1495 -->
         <rdf4j.version>3.7.7</rdf4j.version>
         <rendersnake.version>1.9.0</rendersnake.version>
         <rocketmq.version>5.0.2</rocketmq.version>
@@ -144,11 +125,9 @@
         <xz.version>1.10</xz.version>
         <qdrant-java-client.version>1.14.0</qdrant-java-client.version>
 
-        <!-- Test dependencies -->
         <junit.version>5.11.4</junit.version>
         <mockito.version>5.12.0</mockito.version>
 
-        <!-- Maven settings & dependencies -->
         <apache-rat-plugin.version>0.16.1</apache-rat-plugin.version>
         <checksum-maven-plugin.version>1.11</checksum-maven-plugin.version>
         <checkstyle.version>10.17.0</checkstyle.version>
@@ -182,14 +161,14 @@
                 <version>${commons-codec.version}</version>
             </dependency>
             <dependency>
-                  <groupId>commons-collections</groupId>
-                  <artifactId>commons-collections</artifactId>
-                  <version>${commons-collections.version}</version>
-              </dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>${commons-collections.version}</version>
+            </dependency>
             <dependency>
-              <groupId>org.apache.commons</groupId>
-              <artifactId>commons-csv</artifactId>
-              <version>${commons-csv.version}</version>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-csv</artifactId>
+                <version>${commons-csv.version}</version>
             </dependency>
             <dependency>
                 <groupId>commons-io</groupId>
@@ -769,7 +748,6 @@
             </dependency>
 
 
-            <!-- test dependencies -->
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-api</artifactId>
@@ -795,7 +773,6 @@
                 <scope>test</scope>
             </dependency>
 
-            <!-- required by streampipes-maven-plugin -->
             <dependency>
                 <groupId>org.apache.maven</groupId>
                 <artifactId>maven-plugin-api</artifactId>
@@ -854,7 +831,6 @@
 
 
 
-            <!-- only used by extensions -->
             <dependency>
                 <groupId>com.google.maps</groupId>
                 <artifactId>google-maps-services</artifactId>
@@ -989,7 +965,6 @@
             </dependency>
 
 
-            <!-- dependency convergence -->
             <dependency>
                 <groupId>org.jboss.logging</groupId>
                 <artifactId>jboss-logging</artifactId>
@@ -1138,9 +1113,6 @@
             <id>apache-release</id>
             <build>
                 <plugins>
-                    <!--
-                        Create MD5 and SHA512 checksum files for the release artifacts.
-                    -->
                     <plugin>
                         <groupId>net.nicoulaj.maven.plugins</groupId>
                         <artifactId>checksum-maven-plugin</artifactId>
@@ -1192,10 +1164,7 @@
         </profile>
     </profiles>
 
-    <!-- Build Settings -->
     <build>
-
-        <!-- Plugin Management -->
 
         <pluginManagement>
             <plugins>
@@ -1288,9 +1257,6 @@
         </pluginManagement>
 
 
-        <!-- Plugins -->
-
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -1331,7 +1297,6 @@
                             </rules>
                         </configuration>
                     </execution>
-                    <!-- Ensure we're not mixing dependency versions -->
                     <execution>
                         <id>enforce-version-convergence</id>
                         <phase>validate</phase>
@@ -1424,59 +1389,48 @@
                     <useMavenDefaultExcludes>true</useMavenDefaultExcludes>
                     <consoleOutput>true</consoleOutput>
                     <excludes>
-                        <!-- Git related files -->
                         <exclude>**/.git/**</exclude>
                         <exclude>**/.gitignore</exclude>
                         <exclude>**/.gitkeep</exclude>
                         <exclude>**/.spignore</exclude>
 
-                        <!-- License Files for other licenses -->
+                        <exclude>**/.ci_temp_file</exclude>
                         <exclude>**/UNLICENSE</exclude>
 
-                        <!-- Maven related files -->
                         <exclude>**/target/**</exclude>
                         <exclude>target/**</exclude>
 
-                        <!-- Eclipse related files -->
                         <exclude>**/.project</exclude>
                         <exclude>**/.settings/**</exclude>
                         <exclude>**/.classpath</exclude>
                         <exclude>**/.factorypath</exclude>
 
-                        <!-- IntelliJ related files -->
                         <exclude>**/.idea/**</exclude>
                         <exclude>**/*.iml</exclude>
 
-                        <!-- JSON doesn't like comments -->
                         <exclude>**/*.json</exclude>
                         <exclude>**/*.jsonld</exclude>
                         <exclude>**/*.txt</exclude>
 
-                        <!-- CSV also doesn't like comments -->
                         <exclude>**/*.csv</exclude>
 
-                        <!-- Jupyter Notebooks as well -->
                         <exclude>**/*.ipynb</exclude>
 
-                        <!-- Ignore SVG files -->
                         <exclude>**/*.svg</exclude>
 
                         <exclude>**/system</exclude>
 
-                        <!-- Test files -->
                         <exclude>streampipes-code-generation/src/main/resources/pom</exclude>
                         <exclude>streampipes-code-generation/src/main/resources/web</exclude>
                         <exclude>streampipes-code-generation/src/test/resources/*_java</exclude>
                         <exclude>streampipes-code-generation/src/test/resources/expected_pom_xml</exclude>
                         <exclude>streampipes-code-generation/src/test/resources/expected_web_xml</exclude>
 
-                        <!-- Archetype resources should not have ASF license header -->
                         <exclude>archetypes/streampipes-archetype-pe-processors-flink/src/main/resources/**</exclude>
                         <exclude>archetypes/streampipes-archetype-pe-processors-jvm/src/main/resources/**</exclude>
                         <exclude>archetypes/streampipes-archetype-pe-sinks-flink/src/main/resources/**</exclude>
                         <exclude>archetypes/streampipes-archetype-pe-sinks-jvm/src/main/resources/**</exclude>
 
-                        <!-- External files -->
                         <exclude>
                             streampipes-extensions/streampipes-pipeline-elements-experimental-flink/src/main/java/com/kohlschutter/boilerpipe/**
                         </exclude>
@@ -1484,20 +1438,15 @@
                             streampipes-extensions/streampipes-processors-geo-jvm/src/main/java/org/apache/streampipes/processors/geo/jvm/processor/revgeocoder/geocode/**
                         </exclude>
 
-                        <!-- External vocabularies -->
                         <exclude>streampipes-measurement-units/src/main/java/com/github/jqudt/**</exclude>
 
-                        <!-- Exclude some UI files which we need to check in more detail -->
                         <exclude>ui/src/assets/img/svg/**</exclude>
 
-                        <!-- Exclude .angular folder -->
                         <exclude>ui/.angular/**</exclude>
 
-                        <!-- Exclude disclaimer and notice files -->
                         <exclude>DISCLAIMER</exclude>
                         <exclude>NOTICE-binary</exclude>
 
-                        <!-- Exclude license files in license folder -->
                         <exclude>licenses/BSD_3-Clause</exclude>
                         <exclude>licenses/CDDL_1.1</exclude>
                         <exclude>licenses/CDDL_1.0</exclude>
@@ -1507,7 +1456,6 @@
                         <exclude>licenses/EPL_1.0</exclude>
                         <exclude>licenses/BSD_2-Clause</exclude>
 
-                        <!-- Exclude Python env -->
                         <exclude>**/venv/**</exclude>
                         <exclude>**/.pytest_cache/**</exclude>
                         <exclude>.ruff_cache/**</exclude>
@@ -1516,10 +1464,8 @@
                         <exclude>**/.mypy_cache/**</exclude>
                         <exclude>**/poetry.lock</exclude>
 
-                        <!-- Exclude Husky which defines its own gitignore and is not detected by rat -->
                         <exclude>ui/.husky/**</exclude>
 
-                        <!-- Exclude GO -->
                         <exclude>**/go.sum</exclude>
 
                     </excludes>
@@ -1578,8 +1524,8 @@
         <developerConnection>scm:git:ssh://git@github.com/apache/streampipes.git</developerConnection>
         <connection>scm:git:ssh://git@github.com/apache/streampipes.git</connection>
         <url>https://github.com/apache/streampipes</url>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <issueManagement>
         <system>GitHub</system>
